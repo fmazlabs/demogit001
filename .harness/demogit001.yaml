@@ -1,0 +1,40 @@
+pipeline:
+  name: demogit001
+  identifier: demogit001
+  projectIdentifier: demogitexp
+  orgIdentifier: default
+  tags: {}
+  properties:
+    ci:
+      codebase:
+        connectorRef: account.fmazlabsgit
+        repoName: demogit001
+        build: <+input>
+  stages:
+    - stage:
+        name: build
+        identifier: build
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: run script
+                  identifier: run_script
+                  spec:
+                    connectorRef: account.harnessImage
+                    image: alpine
+                    shell: Sh
+                    command: echo "Hello Alpine"
+                  description: run
+          infrastructure:
+            type: KubernetesDirect
+            spec:
+              connectorRef: account.Harness_Kubernetes_Cluster
+              namespace: francis-namespace
+              automountServiceAccountToken: true
+              nodeSelector: {}
+              os: Linux
